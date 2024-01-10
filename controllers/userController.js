@@ -24,7 +24,7 @@ userController.createUser = [
       }
   
       try {
-        const { username, password, name, lastname } = req.body;
+        const { username, password, name, lastname, role } = req.body;
         const membershipStatus = 'New';
   
         // Hash the password
@@ -37,6 +37,7 @@ userController.createUser = [
           name,
           lastname,
           membershipStatus,
+          role,
         });
   
         // Save the user to the database

@@ -15,18 +15,19 @@ const UserSchema = new Schema({
   },
   name: {
     type: String,
-    required:true,
+    required: true,
     maxLength: 15,
   },
   lastname: {
     type: String,
-    required:true,
+    required: true,
     maxLength: 15,
   },
   membershipStatus: {
     type: String,
-    required:true,
+    required: true,
   },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
 });
 
 const User = mongoose.model("User", UserSchema);

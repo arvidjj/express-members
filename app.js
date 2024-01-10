@@ -14,6 +14,7 @@ const passportConfig = require('./passport-config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var messagesRouter = require('./routes/messages');
 
 var app = express();
 
@@ -39,6 +40,7 @@ app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/messages', messagesRouter);
 
 //mongodb connect
 mongoose.connect(process.env.MONGODB_URL);

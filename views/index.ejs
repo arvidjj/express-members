@@ -15,8 +15,26 @@
     <div class="row">
       <div class="col-md-6 offset-md-3">
         <h1 class="text-center mb-4">Welcome to the members club</h1>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Navigation</h5>
+            <ul class="list-group">
+              <% if (currentUser) { %>
+                <li class="list-group-item"><a href="/membership" class="btn btn-info">Membership</a></li>
+                <li class="list-group-item"><a href="/log-out" class="btn btn-danger">Log out</a></li>
+                <% } %>
+                  <% if (!currentUser) { %>
+                    <li class="list-group-item"><a href="/sign-up" class="btn btn-primary">Sign Up</a></li>
+                    <li class="list-group-item"><a href="/log-in" class="btn btn-success">Log In</a></li>
+                    <% } %>
+            </ul>
+          </div>
+        </div>
+
         <% if (currentUser) { %>
           <p>Logged in as: <%= currentUser.username %>
+              <a href="/new">Create a new message</a>
+              <% } %>
           </p>
           <h2>Messages</h2>
           <% messages.forEach(message=> { %>
@@ -30,28 +48,21 @@
               <% if (currentUser && message.user) { %>
                 <p>Author: <%= message.user.username %>
                 </p>
-                <% } %>
-                  <p>Posted on: <%= message.timestamp %>
-                  </p>
+
+                <p>Posted on: <%= message.timestamp %>
+                </p>
+
+                <% if (currentUser && currentUser.role==='admin' ) { %>
+                  <form action="/messages/delete/<%= message._id %>" method="GET" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete Message</button>
+                  </form>
+                  <% } %>
+
+
+                    <% } %>
             </div>
             <% }); %>
-              <a href="/new">Create a new message</a>
-              <% } %>
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Navigation</h5>
-                    <ul class="list-group">
-                      <% if (currentUser) { %>
-                        <li class="list-group-item"><a href="/membership" class="btn btn-info">Membership</a></li>
-                        <li class="list-group-item"><a href="/log-out" class="btn btn-danger">Log out</a></li>
-                        <% } %>
-                          <% if (!currentUser) { %>
-                            <li class="list-group-item"><a href="/sign-up" class="btn btn-primary">Sign Up</a></li>
-                            <li class="list-group-item"><a href="/log-in" class="btn btn-success">Log In</a></li>
-                            <% } %>
-                    </ul>
-                  </div>
-                </div>
+
       </div>
     </div>
   </div>
