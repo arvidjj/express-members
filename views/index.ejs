@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Express App</title>
+  <title>Members club</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -14,36 +14,41 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-6 offset-md-3">
-        <h1 class="text-center mb-4">Welcome to My Express App</h1>
-        <h2>Messages</h2>
-        <% messages.forEach(message=> { %>
-          <div>
-            <h2>
-              <%= message.title %>
-            </h2>
-            <p>
-              <%= message.body %>
-            </p>
-            <% if (currentUser && message.user) { %>
-              <p>Author: <%= message.user.username %>
+        <h1 class="text-center mb-4">Welcome to the members club</h1>
+        <% if (currentUser) { %>
+          <p>Logged in as: <%= currentUser.username %>
+          </p>
+          <h2>Messages</h2>
+          <% messages.forEach(message=> { %>
+            <div>
+              <h2>
+                <%= message.title %>
+              </h2>
+              <p>
+                <%= message.body %>
               </p>
-              <% } %>
-                <p>Posted on: <%= message.timestamp %>
+              <% if (currentUser && message.user) { %>
+                <p>Author: <%= message.user.username %>
                 </p>
-          </div>
-          <% }); %>
-
-            <% if (currentUser) { %>
+                <% } %>
+                  <p>Posted on: <%= message.timestamp %>
+                  </p>
+            </div>
+            <% }); %>
               <a href="/new">Create a new message</a>
               <% } %>
-
                 <div class="card">
                   <div class="card-body">
                     <h5 class="card-title">Navigation</h5>
                     <ul class="list-group">
-                      <li class="list-group-item"><a href="/sign-up" class="btn btn-primary">Sign Up</a></li>
-                      <li class="list-group-item"><a href="/log-in" class="btn btn-success">Log In</a></li>
-                      <li class="list-group-item"><a href="/membership" class="btn btn-info">Membership</a></li>
+                      <% if (currentUser) { %>
+                        <li class="list-group-item"><a href="/membership" class="btn btn-info">Membership</a></li>
+                        <li class="list-group-item"><a href="/log-out" class="btn btn-danger">Log out</a></li>
+                        <% } %>
+                          <% if (!currentUser) { %>
+                            <li class="list-group-item"><a href="/sign-up" class="btn btn-primary">Sign Up</a></li>
+                            <li class="list-group-item"><a href="/log-in" class="btn btn-success">Log In</a></li>
+                            <% } %>
                     </ul>
                   </div>
                 </div>

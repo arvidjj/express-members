@@ -6,8 +6,7 @@ const Message = require('../models/message');
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  const messages = await Message.find().populate('user', 'username'); // Populate author information
-  console.log(req.user)
+  const messages = await Message.find().populate('user', 'username');
   res.render('index', { title: 'Express', messages: messages, currentUser: req.user });
 });
 
