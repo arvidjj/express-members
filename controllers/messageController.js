@@ -11,6 +11,25 @@ messageController.getMessages = async (req, res) => {
     }
   };
 
+  //create message
+messageController.createMessage = async (req, res, next) => {
+  try {
+    const { title, body, user } = req.body;
+    const timestamp = new Date();
+    const message = new Message({
+      title,
+      body,
+      user,
+      timestamp
+    });
+    await message.save();
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
 // Delete message
 messageController.deleteMessage = async (req, res, next) => {
   try {

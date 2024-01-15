@@ -3,6 +3,9 @@ var router = express.Router();
 const passport = require('passport');
 const userController = require("../controllers/userController");
 const Message = require('../models/message');
+//jwt
+const jwt = require('jsonwebtoken');
+
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
@@ -14,34 +17,28 @@ router.get('/new', (req, res) => {
   res.render('new-message');
 });
 
-// Handle the creation of a new message
-router.post('/create-message', async (req, res) => {
-  try {
-    const timestamp = new Date().toISOString();
-    const newMessage = new Message({
-      title: req.body.title,
-      body: req.body.body,
-      user: req.user._id, // Assuming user information is stored in req.user
-      timestamp: timestamp
-    });
-    await newMessage.save();
-    res.redirect('/');
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
 router.post("/sign-up", userController.createUser, (req, res) => {
   res.redirect("/");
 });
 
-router.post('/log-in',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/log-in'
-  })
-);
+//also needs to use JWT
+router.post('/log-in', async (req, res) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ error: err });
+    }
+    if (!user) {
+      return res.status(401).json({ message: 'Authentication failed' });
+    }
+    
+    jwt.sign({ id: user._id }, process.env.JWT_SECRET, (jwtErr, token) => {
+      if (jwtErr) {
+        return res.status(500).json({ error: jwtErr });
+      }
+      res.json({ token });
+    });
+  })(req, res);
+});
 
 router.get("/sign-up", function (req, res, next) {
   res.render("sign-up");
@@ -54,6 +51,10 @@ router.get("/log-in", function (req, res, next) {
 router.get('/log-out', (req, res) => {
   req.logout();
   res.redirect('/');
+});
+
+router.get('/membership', (req, res) => {
+  res.render('membership');
 });
 
 module.exports = router;
