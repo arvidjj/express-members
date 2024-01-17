@@ -31,7 +31,7 @@ router.post('/log-in', async (req, res) => {
       return res.status(401).json({ message: 'Authentication failed' });
     }
     
-    jwt.sign({ id: user._id }, process.env.JWT_SECRET, (jwtErr, token) => {
+    jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: '24h'}, (jwtErr, token) => {
       if (jwtErr) {
         return res.status(500).json({ error: jwtErr });
       }
